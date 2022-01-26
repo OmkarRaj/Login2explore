@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en">
+    <head>
+        <title>Bootstrap Example</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">       
+        <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="http://login2explore.com/jpdb/resources/js/0.0.3/jpdb-commons.js"></script>
+    </head>
+    <body style="background-color: #008080">
+        <div class="container">
+            <h2>Registration form</h2>
+            <form id="empForm" method="post">
+                <div class="form-group">
+                    <span><label for="fname">First Name :</label> <label id="fnameMsg">
+                        </label></span>
+                    <input type="text" class="form-control" name="fname" id="fname"
+                           placeholder="Enter First Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="lname">Last Name :</label>
+                    <input type="text" class="form-control" id="lname"
+                           placeholder="Enter Last Name" name="lname">
+                </div>
+                <div class="form-group">
+                    <label for="clg">College :</label>
+                    <input type="text" class="form-control" id="clg"
+                           placeholder="Enter College Name" name="clg">
+                </div>
+                <div class="form-group">
+                    <label for="dpmt">Department :</label>
+                    <input type="text" class="form-control" id="dpmt"
+                           placeholder="Enter Department" name="dpmt">
+                </div>
+                <div class="form-group">
+                    <label for="year">Year :</label>
+                    <input type="number" class="form-control" id="year"
+                           placeholder="Enter Year" name="year">
+                </div>
+                <div class="form-group">
+                    <label for="division">Division :</label>
+                    <input type="text" class="form-control" id="division"
+                           placeholder="Enter Division" name="division">
+                </div>
+                <div class="form-group">
+                    <label for="cnt">Contact :</label>
+                    <input type="text" class="form-control" id="cnt"
+                           placeholder="Enter Mobile No." name="cnt">
+                </div>
+            
+                <div class="form-group">
+                    <label for="mail">Email:</label>
+                    <input type="email" class="form-control" id="mail"
+                           placeholder="Enter Email Id" name="mail">
+                </div>
+                <input type="button" class="btn btn-primary" id="empSave" value="Save"
+                       onclick="saveStudent();">
+            </form>
+        </div>
+        <script>
+            $("#fname").focus();
+            function validateAndGetFormData() {
+                var fnameVar = $("#fname").val();
+                if (fnameVar === "") {
+                    alert("First name is required");
+                    $("#fname").focus();
+                    return "";
+                }
+                var lnameVar = $("#lname").val();
+                if (lnameVar === "") {
+                    alert("Last name is required");
+                    $("#lname").focus();
+                    return "";
+                }
+                var mailVar = $("#mail").val();
+                if (mailVar === "") {
+                    alert("Employee Email is Required Value");
+                    $("#mail").focus();
+                    return "";
+                }
+                
+                var clgVar = $("#clg").val();
+                var cntVar = $("#cnt").val();
+                var divisionVar = $("#division").val();
+                var dpmtVar = $("#dpmt").val();
+                var yearVar = $("#year").val();
+                
+                var jsonStrObj = {
+                    fname: fnameVar,
+                    lname: lnameVar,
+                    mail: mailVar,
+                    clg: clgVar,
+                    cnt: cntVar,
+                    division: divisionVar,
+                    dpmt: dpmtVar,
+                    year: yearVar,
+                };
+                return JSON.stringify(jsonStrObj);
+            }
+            // This method is used to create PUT Json request.
+   
+            function resetForm() {
+                $("#fname").val("")
+                $("#lname").val("");
+                $("#mail").val("");
+                $("#clg").focus();
+                $("#cnt").val("")
+                $("#division").val("");
+                $("#dpmt").val("");
+                $("#year").focus();
+            }
+            function saveStudent() {
+                var jsonStr = validateAndGetFormData();
+                if (jsonStr === "") {
+                    return;
+                }
+                var putReqStr = createPUTRequest("90938453|-31948827851083980|90947315",
+                        jsonStr, "STUDENT", "Regs-Rel");
+                alert(putReqStr);
+                jQuery.ajaxSetup({async: false});
+                var resultObj = executeCommandAtGivenBaseUrl(putReqStr,
+                        "http://api.login2explore.com:5577", "/api/iml");
+                alert(JSON.stringify(resultObj));
+                jQuery.ajaxSetup({async: true});
+                resetForm();
+            }
+        </script>
+    </body>
+</html>
